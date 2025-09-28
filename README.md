@@ -14,7 +14,7 @@
 Here’s a sneak peek of **LogicX** in action:
 
 <p align="center">
-  <img src="https://github.com/yourusername/LogicX/blob/main/assets/logicx-preview.png" alt="LogicX Webpage Preview" width="600"/>
+  <img src="C:\Users\HP\OneDrive\Pictures\Screenshots\Screenshot 2025-09-28 162655.png" alt="LogicX Webpage Preview" width="600"/>
 </p>
 
 ---
