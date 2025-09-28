@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogicX - Assistant for Revolutionary Minds</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            padding: 30px;
+            border: 1px solid #e1e5eb;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .voice-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        #volumeSlider {
+            width: 80px;
+        }
+        
+        .welcome-banner {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: fadeIn 1s ease-in;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .welcome-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .welcome-text {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .welcome-subtext {
+            font-size: 1em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .welcome-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .welcome-btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            font-size: 0.95em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .welcome-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #7f8c8d;
+            align-self: flex-end;
+            transition: color 0.3s;
+        }
+        
+        .close-btn:hover {
+            color: #34495e;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .assistant {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            min-height: 200px;
+            border: 1px solid #e1e5eb;
+        }
+        
+        #conversation {
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e1e5eb;
+            padding-bottom: 20px;
+        }
+        
+        .user-message {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 12px 15px;
+            border-radius: 18px 18px 0 18px;
+            margin: 8px 0;
+            max-width: 80%;
+            float: right;
+            clear: both;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid #bbdefb;
+        }
+        
+        .assistant-message {
+            background: linear-gradient(135deg, #f1f1f1, #e8e8e8);
+            padding: 12px 15px;
+            border-radius: 18px 18px 18px 0;
+            margin: 8px 0;
+            max-width: 80%;
+            float: left;
+            clear: both;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e8e8e8;
+        }
+        
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            overflow-x: auto;
+            margin-bottom: 12px;
+            border: 1px solid #3e4451;
+            font-size: 0.95em;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        #startBtn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            flex: 1;
+        }
+        
+        #startBtn.listening {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+            animation: pulse 1.5s infinite;
+        }
+        
+        #clearBtn {
+            background: linear-gradient(135deg, #607d8b, #546e7a);
+            color: white;
+        }
+        
+        #stopBtn {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+        }
+        
+        #stopBtn:disabled {
+            background: linear-gradient(135deg, #cccccc, #b3b3b3);
+            cursor: not-allowed;
+        }
+        
+        .explain-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            margin-top: 8px;
+            padding: 8px 15px;
+            font-size: 0.9em;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .status {
+            text-align: center;
+            margin: 10px 0;
+            font-style: italic;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+        
+        .language-selector {
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: white;
+            font-size: 1em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-weight: 500;
+        }
+        
+        .explanation {
+            background: #e8f5e9;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            display: none;
+            border: 1px solid #c8e6c9;
+            font-size: 0.95em;
+        }
+        
+        .typing-indicator {
+            display: inline-block;
+            margin-left: 5px;
+        }
+        
+        .typing-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #7f8c8d;
+            margin-right: 3px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .logo span {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #3498db;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .suggestion-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        
+        .suggestion-chip {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 1px solid #bbdefb;
+            border-radius: 20px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .suggestion-chip:hover {
+            background: linear-gradient(135deg, #bbdefb, #90caf9);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <span>LogicX</span>
+        </div>
+        <h1>LogicX</h1>
+        
+        <div class="header-container">
+            <div></div> <!-- Empty div for spacing -->
+            <div class="voice-controls">
+                <div class="volume-container">
+                    <span id="volumeIcon">🔊</span>
+                    <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.8">
+                </div>
+                <select id="languageSelect" class="language-selector">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="welcome-banner" id="welcomeBanner">
+            <button class="close-btn" id="closeWelcome">✕</button>
+            <div class="welcome-content">
+                <div class="welcome-text" id="welcomeText">Welcome to LogicX</div>
+                <div class="welcome-subtext" id="welcomeSubtext">Your Assistant for Revolutionary Minds</div>
+                <div class="welcome-options">
+                    <button class="welcome-btn" id="welcomeHelp">How can you help me?</button>
+                    <button class="welcome-btn" id="welcomeExamples">Show examples</button>
+                    <button class="welcome-btn" id="welcomeTutorial">Quick tutorial</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="language-selector">
+            <label for="language">Programming Language:</label>
+            <select id="language">
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+                <option value="java">Java</option>
+                <option value="csharp">C#</option>
+                <option value="php">PHP</option>
+                <option value="cpp">C++</option>
+            </select>
+        </div>
+
+        <div class="suggestion-chips">
+            <div class="suggestion-chip" data-query="how to reverse a string">Reverse a string</div>
+            <div class="suggestion-chip" data-query="fibonacci sequence">Fibonacci sequence</div>
+            <div class="suggestion-chip" data-query="sort an array">Sort an array</div>
+            <div class="suggestion-chip" data-query="binary search">Binary search</div>
+        </div>
+        
+        <div class="assistant">
+            <div id="conversation"></div>
+            <div class="status" id="status">Press the button and speak your programming question</div>
+            <div class="error" id="error"></div>
+        </div>
+        
+        <div class="controls">
+            <button id="startBtn">Start Listening</button>
+            <button id="stopBtn" disabled>Stop Speaking</button>
+            <button id="clearBtn">Clear Chat</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Voice Controls
+            const volumeSlider = document.getElementById('volumeSlider');
+            const volumeIcon = document.getElementById('volumeIcon');
+            const languageSelect = document.getElementById('languageSelect');
+            const closeWelcome = document.getElementById('closeWelcome');
+            const welcomeBanner = document.getElementById('welcomeBanner');
+            const welcomeText = document.getElementById('welcomeText');
+            const welcomeSubtext = document.getElementById('welcomeSubtext');
+            const welcomeHelp = document.getElementById('welcomeHelp');
+            const welcomeExamples = document.getElementById('welcomeExamples');
+            const welcomeTutorial = document.getElementById('welcomeTutorial');
+            const startBtn = document.getElementById('startBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const conversation = document.getElementById('conversation');
+            const status = document.getElementById('status');
+            const errorElement = document.getElementById('error');
+            const languageSelectProg = document.getElementById('language');
+            const suggestionChips = document.querySelectorAll('.suggestion-chip');
+            
+            let currentVolume = 0.8;
+            let currentLanguage = 'en';
+            let isWelcomeVisible = true;
+            let isSpeaking = false;
+            
+            // Multilingual Welcome Messages
+            const welcomeMessages = {
+                'en': {
+                    title: "Welcome to LogicX",
+                    subtitle: "Your Assistant for Revolutionary Minds",
+                    help: "How can you help me?",
+                    examples: "Show examples",
+                    tutorial: "Quick tutorial",
+                    helpResponse: "I can help you with:\n- Writing code in multiple languages\n- Debugging your programs\n- Explaining complex concepts\n- Optimizing your algorithms\n- Learning new technologies\n\nJust ask me anything about programming!",
+                    examplesResponse: "Here are some things you can ask:\n\n\"Show me how to reverse a string in Python\"\n\"How to make an HTTP request in JavaScript\"\n\"Explain object-oriented programming\"\n\"Help me fix this error: ...\"\n\"What's the difference between let and var?\"",
+                    tutorialResponse: "Quick Tutorial:\n1. Select your programming language\n2. Click 'Start Listening' and speak clearly\n3. I'll respond with code or explanations\n4. Use 'Explain Code' buttons for details\n5. Adjust volume or language anytime"
+                },
+                'hi': {
+                    title: "LogicX में आपका स्वागत है",
+                    subtitle: "क्रांतिकारी दिमागों के लिए आपका सहायक",
+                    help: "आप मेरी कैसे मदद कर सकते हैं?",
+                    examples: "उदाहरण दिखाएं",
+                    tutorial: "त्वरित ट्यूटोरियल",
+                    helpResponse: "मैं आपकी मदद कर सकता हूं:\n- कई भाषाओं में कोड लिखने में\n- आपके प्रोग्राम को डीबग करने में\n- जटिल अवधारणाओं को समझाने में\n- आपके एल्गोरिदम को अनुकूलित करने में\n- नई तकनीकें सीखने में\n\nबस मुझे प्रोग्रामिंग के बारे में कुछ भी पूछें!",
+                    examplesResponse: "यहां कुछ चीजें हैं जो आप पूछ सकते हैं:\n\n\"मुझे पायथन में एक स्ट्रिंग को उलटने का तरीका दिखाएं\"\n\"जावास्क्रिप्ट में HTTP अनुरोध कैसे करें\"\n\"ऑब्जेक्ट-ओरिएंटेड प्रोग्रामिंग समझाएं\"\n\"मुझे इस त्रुटि को ठीक करने में मदद करें: ...\"\n\"लेट और वार के बीच क्या अंतर है?\"",
+                    tutorialResponse: "त्वरित ट्यूटोरियल:\n1. अपनी प्रोग्रामिंग भाषा चुनें\n2. 'सुनना शुरू करें' पर क्लिक करें और स्पष्ट बोलें\n3. मैं कोड या स्पष्टीकरण के साथ जवाब दूंगा\n4. विवरण के लिए 'कोड समझाएं' बटन का उपयोग करें\n5. किसी भी समय वॉल्यूम या भाषा समायोजित करें"
+                },
+                'es': {
+                    title: "Bienvenido a LogicX",
+                    subtitle: "Tu Asistente para Mentes Revolucionarias",
+                    help: "¿Cómo puedes ayudarme?",
+                    examples: "Mostrar ejemplos",
+                    tutorial: "Tutorial rápido",
+                    helpResponse: "Puedo ayudarte con:\n- Escribir código en múltiples lenguajes\n- Depurar tus programas\n- Explicar conceptos complejos\n- Optimizar tus algoritmos\n- Aprender nuevas tecnologías\n\n¡Solo pregúntame cualquier cosa sobre programación!",
+                    examplesResponse: "Aquí hay algunas cosas que puedes preguntar:\n\n\"Muéstrame cómo invertir una cadena en Python\"\n\"Cómo hacer una solicitud HTTP en JavaScript\"\n\"Explica la programación orientada a objetos\"\n\"Ayúdame a solucionar este error: ...\"\n\"¿Cuál es la diferencia entre let y var?\"",
+                    tutorialResponse: "Tutorial rápido:\n1. Selecciona tu lenguaje de programación\n2. Haz clic en 'Comenzar a escuchar' and speak clearly\n3. Responderé con código o explicaciones\n4. Usa los botones 'Explicar código' para detalles\n5. Ajusta el volumen or el idioma en cualquier momento"
+                },
+                'fr': {
+                    title: "Bienvenue sur LogicX",
+                    subtitle: "Votre Assistant pour Esprits Révolutionnaires",
+                    help: "Comment pouvez-vous m'aider?",
+                    examples: "Afficher des exemples",
+                    tutorial: "Tutoriel rapide",
+                    helpResponse: "Je peux vous aider avec:\n- Écrire du code dans plusieurs langages\n- Déboguer vos programmes\n- Expliquer des concepts complexes\n- Optimiser vos algorithmes\n- Apprendre de nouvelles technologies\n\nDemandez-moi simplement n'importe quoi sur la programmation!",
+                    examplesResponse: "Voici quelques cosas que vous pouvez demander:\n\n\"Montrez-moi comment inverser une chaîne en Python\"\n\"Comment faire une requête HTTP en JavaScript\"\n\"Expliquez la programmation orientée objet\"\n\"Aidez-moi à corriger cette erreur: ...\"\n\"Quelle est la différence entre let et var?\"",
+                    tutorialResponse: "Tutoriel rapide:\n1. Sélectionnez votre langage de programation\n2. Cliquez sur 'Commencer à écouter' et parlez clairement\n3. Je répondrai avec du code ou des explications\n4. Utilisez les boutons 'Expliquer le code' pour les détails\n5. Ajustez le volume ou la langue à tout moment"
+                },
+                'de': {
+                    title: "Willkommen bei LogicX",
+                    subtitle: "Ihr Assistent für revolutionäre Köpfe",
+                    help: "Wie können Sie mir helfen?",
+                    examples: "Beispiele anzeigen",
+                    tutorial: "Schnellkurs",
+                    helpResponse: "Ich kann Ihnen helfen mit:\n- Code in mehreren Sprachen schreiben\n- Ihre Programme debuggen\n- Komplexe Konzepte erklären\n- Ihre Algorithmen optimieren\n- Neue Technologien lernen\n\nFragen Sie mich einfach alles über Programmierung!",
+                    examplesResponse: "Hier sind einige Dinge, die Sie fragen können:\n\n\"Zeigen Sie mir, wie man einen String in Python umkehrt\"\n\"Wie man eine HTTP-Anfrage in JavaScript macht\"\n\"Erklären Sie objektorientierte Programmierung\"\n\"Helfen Sie mir, diesen Fehler zu beheben: ...\"\n\"Was ist der Unterschied zwischen let und var?\"",
+                    tutorialResponse: "Schnellkurs:\n1. Wählen Sie Ihre Programmiersprache\n2. Klicken Sie auf 'Zuhören starten' und sprechen Sie deutlich\n3. Ich antworte mit Code oder Erklärungen\n4. Verwenden Sie die 'Code erklären'-Schaltflächen für Details\n5. Passen Sie Lautstärke oder Sprache jederzeit an"
+                }
+            };
+            
+            // Suggestion chips event listeners
+            suggestionChips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    const query = this.getAttribute('data-query');
+                    processQuery(query);
+                });
+            });
+            
+            // Volume Control
+            volumeSlider.addEventListener('input', function() {
+                currentVolume = parseFloat(this.value);
+                updateVolumeIcon();
+                localStorage.setItem('logicxVolume', currentVolume);
+            });
+            
+            function updateVolumeIcon() {
+                if (currentVolume === 0) {
+                    volumeIcon.textContent = "🔇";
+                } else if (currentVolume < 0.4) {
+                    volumeIcon.textContent = "🔈";
+                } else {
+                    volumeIcon.textContent = "🔊";
+                }
+            }
+            
+            // Language Selection
+            languageSelect.addEventListener('change', function() {
+                currentLanguage = this.value;
+                localStorage.setItem('logicxLanguage', currentLanguage);
+                updateWelcomeContent();
+                if (isWelcomeVisible) {
+                    showWelcomeMessage();
+                }
+            });
+            
+            function updateWelcomeContent() {
+                const welcome = welcomeMessages[currentLanguage] || welcomeMessages['en'];
+                welcomeText.textContent = welcome.title;
+                welcomeSubtext.textContent = welcome.subtitle;
+                welcomeHelp.textContent = welcome.help;
+                welcomeExamples.textContent = welcome.examples;
+                welcomeTutorial.textContent = welcome.tutorial;
+            }
+            
+            // Close Welcome Banner
+            closeWelcome.addEventListener('click', function() {
+                welcomeBanner.style.display = 'none';
+                isWelcomeVisible = false;
+                localStorage.setItem('logicxWelcomeClosed', 'true');
+            });
+            
+            // Welcome button handlers
+            welcomeHelp.addEventListener('click', function() {
+                const welcome = welcomeMessages[currentLanguage] || welcomeMessages['en'];
+                addMessage('assistant', welcome.helpResponse, false);
+                speak(welcome.helpResponse);
+            });
+            
+            welcomeExamples.addEventListener('click', function() {
+                const welcome = welcomeMessages[currentLanguage] || welcomeMessages['en'];
+                addMessage('assistant', welcome.examplesResponse, false);
+                speak(welcome.examplesResponse);
+            });
+            
+            welcomeTutorial.addEventListener('click', function() {
+                const welcome = welcomeMessages[currentLanguage] || welcomeMessages['en'];
+                addMessage('assistant', welcome.tutorialResponse, false);
+                speak(welcome.tutorialResponse);
+            });
+            
+            // Stop Speaking button handler
+            stopBtn.addEventListener('click', function() {
+                if (isSpeaking) {
+                    stopSpeaking();
+                }
+            });
+            
+            // Load saved preferences
+            function loadPreferences() {
+                const savedVolume = localStorage.getItem('logicxVolume');
+                const savedLanguage = localStorage.getItem('logicxLanguage');
+                const welcomeClosed = localStorage.getItem('logicxWelcomeClosed');
+                
+                if (savedVolume) {
+                    currentVolume = parseFloat(savedVolume);
+                    volumeSlider.value = currentVolume;
+                    updateVolumeIcon();
+                }
+                
+                if (savedLanguage && welcomeMessages[savedLanguage]) {
+                    currentLanguage = savedLanguage;
+                    languageSelect.value = currentLanguage;
+                }
+                
+                if (welcomeClosed === 'true') {
+                    welcomeBanner.style.display = 'none';
+                    isWelcomeVisible = false;
+                }
+                
+                updateWelcomeContent();
+            }
+            
+            // Show welcome message
+            function showWelcomeMessage() {
+                const welcome = welcomeMessages[currentLanguage] || welcomeMessages['en'];
+                const welcomeSpeech = `${welcome.title}. ${welcome.subtitle}. ${welcome.help}`;
+                
+                if (currentVolume > 0 && 'speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(welcomeSpeech);
+                    utterance.volume = currentVolume;
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1.1;
+                    
+                    // Set appropriate voice
+                    const voices = speechSynthesis.getVoices();
+                    const preferredVoice = voices.find(v => v.lang.startsWith(currentLanguage));
+                    if (preferredVoice) {
+                        utterance.voice = preferredVoice;
+                    }
+                    
+                    speechSynthesis.speak(utterance);
+                }
+            }
+            
+            // Initialize
+            loadPreferences();
+            
+            // Wait for voices to load
+            let voicesLoaded = false;
+            speechSynthesis.onvoiceschanged = function() {
+                voicesLoaded = true;
+                if (isWelcomeVisible) {
+                    showWelcomeMessage();
+                }
+            };
+            
+            // Fallback if voices don't load
+            setTimeout(function() {
+                if (!voicesLoaded && isWelcomeVisible) {
+                    showWelcomeMessage();
+                }
+            }, 1000);
+            
+            // Speech Recognition Setup
+            if (!('webkitSpeechRecognition' in window)) {
+                errorElement.textContent = "Speech recognition is not supported in your browser. Try Chrome or Edge.";
+                startBtn.disabled = true;
+                return;
+            }
+            
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            let recognition;
+            
+            try {
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+            } catch (err) {
+                debugLog("Failed to initialize speech recognition: " + err.message);
+                startBtn.disabled = true;
+                return;
+            }
+            
+            const synth = window.speechSynthesis;
+            let conversationHistory = [];
+            let isListening = false;
+            
+            startBtn.addEventListener('click', function() {
+                if (isListening) {
+                    stopListening();
+                } else {
+                    startListening();
+                }
+            });
+            
+            clearBtn.addEventListener('click', clearConversation);
+            
+            function startListening() {
+                try {
+                    errorElement.textContent = '';
+                    recognition.start();
+                    startBtn.classList.add('listening');
+                    status.textContent = "Listening... Speak your question";
+                    isListening = true;
+                } catch (err) {
+                    debugLog("Error starting speech recognition: " + err.message);
+                    stopListening();
+                }
+            }
+            
+            function stopListening() {
+                if (isListening) {
+                    try {
+                        recognition.stop();
+                    } catch (err) {
+                        debugLog("Error stopping recognition: " + err.message);
+                    }
+                }
+                
+                startBtn.classList.remove('listening');
+                isListening = false;
+                
+                if (status.textContent === "Listening... Speak your question") {
+                    status.textContent = "Press the button to speak again";
+                }
+            }
+            
+            function stopSpeaking() {
+                if (synth && synth.speaking) {
+                    synth.cancel();
+                    isSpeaking = false;
+                    stopBtn.disabled = true;
+                    status.textContent = "Speech stopped";
+                }
+            }
+            
+            function clearConversation() {
+                conversation.innerHTML = '';
+                conversationHistory = [];
+                status.textContent = "Press the button and speak your programming question";
+                errorElement.textContent = '';
+            }
+            
+            function addMessage(speaker, text, isCode = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `${speaker}-message`;
+                
+                if (isCode) {
+                    const codeBlock = document.createElement('pre');
+                    codeBlock.className = 'code-block';
+                    codeBlock.textContent = text;
+                    messageDiv.appendChild(codeBlock);
+                    
+                    // Add explain button
+                    const explainBtn = document.createElement('button');
+                    explainBtn.className = 'explain-btn';
+                    explainBtn.textContent = 'Explain Code';
+                    explainBtn.onclick = function() {
+                        explainCode(text, languageSelectProg.value, messageDiv);
+                    };
+                    messageDiv.appendChild(explainBtn);
+                    
+                    // Add explanation div (initially hidden)
+                    const explanationDiv = document.createElement('div');
+                    explanationDiv.className = 'explanation';
+                    messageDiv.appendChild(explanationDiv);
+                } else {
+                    messageDiv.textContent = text;
+                }
+                
+                conversation.appendChild(messageDiv);
+                conversation.scrollTop = conversation.scrollHeight;
+                
+                conversationHistory.push({
+                    speaker,
+                    text,
+                    isCode
+                });
+            }
+            
+            function explainCode(code, language, messageDiv) {
+                const explanationDiv = messageDiv.querySelector('.explanation');
+                
+                if (explanationDiv.style.display === 'block') {
+                    explanationDiv.style.display = 'none';
+                    return;
+                }
+                
+                const explanation = generateExplanation(code, language);
+                explanationDiv.innerHTML = explanation;
+                explanationDiv.style.display = 'block';
+                
+                // Speak the explanation
+                speak(explanation);
+            }
+            
+            function generateExplanation(code, language) {
+                // This function would generate explanations based on the code content
+                // For simplicity, we'll return a generic explanation
+                return `<strong>Code Explanation:</strong><br>
+                This code demonstrates a common programming pattern in ${language}. 
+                The implementation follows best practices for readability and efficiency.
+                <br><br>
+                <strong>Key concepts:</strong>
+                <ul>
+                    <li>Modular code structure</li>
+                    <li>Proper variable naming</li>
+                    <li>Efficient algorithm implementation</li>
+                    <li>Error handling considerations</li>
+                </ul>`;
+            }
+            
+            function speak(text) {
+                if (synth && currentVolume > 0 && !isSpeaking) {
+                    isSpeaking = true;
+                    stopBtn.disabled = false;
+                    // Remove HTML tags for speech
+                    const cleanText = text.replace(/<[^>]*>/g, '');
+                    const utterance = new SpeechSynthesisUtterance(cleanText);
+                    utterance.volume = currentVolume;
+                    
+                    // Set appropriate voice if available
+                    const voices = speechSynthesis.getVoices();
+                    const preferredVoice = voices.find(v => v.lang.startsWith(currentLanguage));
+                    if (preferredVoice) {
+                        utterance.voice = preferredVoice;
+                    }
+                    
+                    utterance.onend = function() {
+                        isSpeaking = false;
+                        stopBtn.disabled = true;
+                    };
+                    
+                    synth.speak(utterance);
+                }
+            }
+            
+            function processQuery(query) {
+                const language = languageSelectProg.value;
+                addMessage('user', query);
+                status.textContent = "Thinking...";
+                
+                // Show typing indicator
+                const typingIndicator = document.createElement('span');
+                typingIndicator.className = 'typing-indicator';
+                typingIndicator.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+                status.appendChild(typingIndicator);
+                
+                setTimeout(function() {
+                    status.removeChild(typingIndicator);
+                    let response = generateResponse(query, language);
+                    addMessage('assistant', response.text, response.isCode);
+                    
+                    status.textContent = "Press the button to speak again";
+                    
+                    // Speak the response if it's not code
+                    if (!response.isCode) {
+                        speak(response.text);
+                    }
+                }, 1500);
+            }
+            
+            function generateResponse(query, language) {
+                const lowerQuery = query.toLowerCase();
+                
+                if (lowerQuery.includes('hello') || lowerQuery.includes('hi')) {
+                    const welcome = welcomeMessages[currentLanguage] || welcomeMessages['en'];
+                    return {
+                        text: `Hello! ${welcome.helpResponse}`,
+                        isCode: false
+                    };
+                }
+                
+                // Handle language-specific code generation
+                if (language === 'python') {
+                    return generatePythonResponse(lowerQuery);
+                } else if (language === 'java') {
+                    return generateJavaResponse(lowerQuery);
+                } else if (language === 'javascript') {
+                    return generateJavaScriptResponse(lowerQuery);
+                } else if (language === 'cpp') {
+                    return generateCppResponse(lowerQuery);
+                } else if (language === 'csharp') {
+                    return generateCSharpResponse(lowerQuery);
+                } else if (language === 'php') {
+                    return generatePhpResponse(lowerQuery);
+                }
+                
+                return {
+                    text: "I understand you're asking about " + query + ". Here's some code in " + language + " that might help:",
+                    isCode: false
+                };
+            }
+            
+            function generatePythonResponse(query) {
+                if (query.includes('reverse') && query.includes('string')) {
+                    return {
+                        text: '# Python code to reverse a string\ndef reverse_string(s):\n    return s[::-1]\n\n# Example usage\nprint(reverse_string("hello"))  # Output: olleh',
+                        isCode: true
+                    };
+                }
+                
+                if (query.includes('fibonacci')) {
+                    return {
+                        text: '# Python code for Fibonacci sequence\ndef fibonacci(n):\n    if n <= 0:\n        return []\n    elif n == 1:\n        return [0]\n    elif n == 2:\n        return [0, 1]\n    \n    seq = [0, 1]\n    for i in range(2, n):\n        seq.append(seq[i-1] + seq[i-2])\n    return seq\n\n# Example usage\nprint(fibonacci(10))  # Output: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]',
+                        isCode: true
+                    };
+                }
+                
+                if (query.includes('sort') && query.includes('array')) {
+                    return {
+                        text: '# Python code to sort an array\ndef bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr\n\n# Example usage\nnumbers = [64, 34, 25, 12, 22, 11, 90]\nprint(bubble_sort(numbers))  # Output: [11, 12, 22, 25, 34, 64, 90]',
+                        isCode: true
+                    };
+                }
+                
+                if (query.includes('binary') && query.includes('search')) {
+                    return {
+                        text: '# Python code for binary search\ndef binary_search(arr, target):\n    low = 0\n    high = len(arr) - 1\n    \n    while low <= high:\n        mid = (low + high) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return -1\n\n# Example usage\nnumbers = [1, 3, 5, 7, 9, 11, 13, 15]\nprint(binary_search(numbers, 9))  # Output: 4',
+                        isCode: true
+                    };
+                }
+                
+                return {
+                    text: "I understand you're asking about " + query + ". Here's some Python code that might help:",
+                    isCode: false
+                };
+            }
+            
+            function generateJavaResponse(query) {
+                if (query.includes('reverse') && query.includes('string')) {
+                    return {
+                        text: '// Java code to reverse a string\npublic class Main {\n    public static String reverseString(String s) {\n        StringBuilder reversed = new StringBuilder();\n        for (int i = s.length() - 1; i >= 0; i--) {\n            reversed.append(s.charAt(i));\n        }\n        return reversed.toString();\n    }\n    \n    public static void main(String[] args) {\n        System.out.println(reverseString("hello")); // Output: olleh\n    }\n}',
+                        isCode: true
+                    };
+                }
+                
+                if (query.includes('fibonacci')) {
+                    return {
+                        text: '// Java code for Fibonacci sequence\nimport java.util.Arrays;\n\npublic class Main {\n    public static int[] fibonacci(int n) {\n        if (n <= 0) return new int[0];\n        if (n == 1) return new int[]{0};\n        if (n == 2) return new int[]{0, 1};\n        \n        int[] seq = new int[n];\n        seq[0] = 0;\n        seq[1] = 1;\n        for (int i = 2; i < n; i++) {\n            seq[i] = seq[i-1] + seq[i-2];\n        }\n        return seq;\n    }\n    \n    public static void main(String[] args) {\n        System.out.println(Arrays.toString(fibonacci(10))); // Output: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]\n    }\n}',
+                        isCode: true
+                    };
+                }
+                
+                return {
+                    text: "I understand you're asking about " + query + ". Here's some Java code that might help:",
+                    isCode: false
+                };
+            }
+            
+            function generateJavaScriptResponse(query) {
+                if (query.includes('reverse') && query.includes('string')) {
+                    return {
+                        text: '// JavaScript code to reverse a string\nfunction reverseString(s) {\n    return s.split(\'\').reverse().join(\'\');\n}\n\n// Example usage\nconsole.log(reverseString("hello")); // Output: olleh',
+                        isCode: true
+                    };
+                }
+                
+                if (query.includes('fibonacci')) {
+                    return {
+                        text: '// JavaScript code for Fibonacci sequence\nfunction fibonacci(n) {\n    if (n <= 0) return [];\n    if (n === 1) return [0];\n    if (n === 2) return [0, 1];\n    \n    const seq = [0, 1];\n    for (let i = 2; i < n; i++) {\n        seq.push(seq[i-1] + seq[i-2]);\n    }\n    return seq;\n}\n\n// Example usage\nconsole.log(fibonacci(10)); // Output: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]',
+                        isCode: true
+                    };
+                }
+                
+                return {
+                    text: "I understand you're asking about " + query + ". Here's some JavaScript code that might help:",
+                    isCode: false
+                };
+            }
+            
+            function generateCppResponse(query) {
+                if (query.includes('reverse') && query.includes('string')) {
+                    return {
+                        text: '// C++ code to reverse a string\n#include <iostream>\n#include <string>\n#include <algorithm>\n\nusing namespace std;\n\nstring reverseString(string s) {\n    reverse(s.begin(), s.end());\n    return s;\n}\n\nint main() {\n    cout << reverseString("hello") << endl; // Output: olleh\n    return 0;\n}',
+                        isCode: true
+                    };
+                }
+                
+                return {
+                    text: "I understand you're asking about " + query + ". Here's some C++ code that might help:",
+                    isCode: false
+                };
+            }
+            
+            function generateCSharpResponse(query) {
+                if (query.includes('reverse') && query.includes('string')) {
+                    return {
+                        text: '// C# code to reverse a string\nusing System;\n\nclass Program\n{\n    public static string ReverseString(string s)\n    {\n        char[] charArray = s.ToCharArray();\n        Array.Reverse(charArray);\n        return new string(charArray);\n    }\n    \n    static void Main()\n    {\n        Console.WriteLine(ReverseString("hello")); // Output: olleh\n    }\n}',
+                        isCode: true
+                    };
+                }
+                
+                return {
+                    text: "I understand you're asking about " + query + ". Here's some C# code that might help:",
+                    isCode: false
+                };
+            }
+            
+            function generatePhpResponse(query) {
+                if (query.includes('reverse') && query.includes('string')) {
+                    return {
+                        text: '<?php\n// PHP code to reverse a string\nfunction reverse_string($s) {\n    return strrev($s);\n}\n\n// Example usage\necho reverse_string("hello"); // Output: olleh\n?>',
+                        isCode: true
+                    };
+                }
+                
+                return {
+                    text: "I understand you're asking about " + query + ". Here's some PHP code that might help:",
+                    isCode: false
+                };
+            }
+            
+            function debugLog(message) {
+                console.log(message);
+                errorElement.textContent += message + '\n';
+            }
+            
+            recognition.onresult = function(event) {
+                if (event.results && event.results.length > 0) {
+                    const transcript = event.results[0][0].transcript;
+                    stopListening();
+                    processQuery(transcript);
+                }
+            };
+            
+            recognition.onerror = function(event) {
+                debugLog("Recognition error: " + event.error);
+                stopListening();
+                
+                if (event.error === 'not-allowed') {
+                    errorElement.textContent = "Microphone access was denied. Please allow microphone access and refresh the page.";
+                }
+            };
+            
+            recognition.onend = function() {
+                stopListening();
+            };
+        });
+    </script>
+</body>
+</html>
