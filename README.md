@@ -9,8 +9,12 @@
 
 <h1 align="center">LogicX</h1>
 
+## 🌐 Webpage Preview
+
+Here’s a sneak peek of **LogicX** in action:
+
 <p align="center">
-  <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="300"/>
+  <img src="https://github.com/yourusername/LogicX/blob/main/assets/logicx-preview.png" alt="LogicX Webpage Preview" width="600"/>
 </p>
 
 ---
