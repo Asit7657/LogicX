@@ -1,0 +1,79 @@
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #667eea, #764ba2);
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  background: #2d3748;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
+}
+
+h1 {
+  color: #fbbf24;
+}
+
+.suggestions button {
+  background: #fbbf24;
+  border: none;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.suggestions button:hover {
+  background: #f59e0b;
+}
+
+#conversation {
+  margin: 20px 0;
+  max-height: 300px;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.message {
+  background: #4a5568;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+}
+
+.message.user {
+  background: #2b6cb0;
+  text-align: right;
+}
+
+pre {
+  background: #1a202c;
+  color: #fbbf24;
+  padding: 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.explain-btn {
+  background: #48bb78;
+  border: none;
+  padding: 5px 10px;
+  margin-top: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+}
+
+.explain-btn:hover {
+  background: #38a169;
+}
+
+.controls {
+  margin-top: 15px;
+}
